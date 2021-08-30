@@ -37,7 +37,8 @@ int main(int argc, char *argv[])
     }
     
     bzero(&server,sizeof(server));
-    
+
+/* da*/   
     server.sin_family = AF_INET; 
     server.sin_port = htons(PORT);
     server.sin_addr = *((struct in_addr *)he->h_addr);
@@ -47,7 +48,7 @@ int main(int argc, char *argv[])
         exit(1);
     }
 
-    char str[] = "horst\n";
+    char str[] = "Hellow  Host !\n";
     
     if((num=send(sockfd,str,sizeof(str),0))==-1)
     {
@@ -64,3 +65,5 @@ int main(int argc, char *argv[])
     close(sockfd);
     return 0;
 }
+
+

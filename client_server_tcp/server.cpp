@@ -36,7 +36,19 @@ int main(int argc, char *argv[])
 
     server.sin_family = AF_INET;
     server.sin_port = htons(PORT);
-    server.sin_addr.s_addr = htonl(INADDR_ANY);
+	
+    /*******************************************************
+    **这里提供了两种写法，对应着两种不一样的结果。
+    **第一种只接受客户端目的IP是127.0.0.1的连接
+	**第二种,无论客户端是不是连接到本server，都可做出回应
+	*******************************************************/
+	#if 1
+    server.sin_addr.s_addr = inet_addr("127.0.0.1");
+	#else
+	server.sin_addr.s_addr = htonl(INADDR_ANY);
+	#endif
+
+	/*bind的是本地IP以及port*/
     if(bind(listenfd, (struct sockaddr *)&server, sizeof(server)) == -1)
     {
         /* handle exception */
@@ -51,25 +63,27 @@ int main(int argc, char *argv[])
     }
 
     addrlen = sizeof(client);
-    while(1){
-        if((connectfd=accept(listenfd,(struct sockaddr *)&client, &addrlen))==-1)
-           {
-            perror("accept() error. \n");
-            exit(1);
-           }
+    while(1)
+	{
+		if((connectfd=accept(listenfd,(struct sockaddr *)&client, &addrlen))==-1)
+		{
+			perror("accept() error. \n");
+			exit(1);
+		}
 
         struct timeval tv;
         gettimeofday(&tv, NULL);
-           printf("You got a connection from client's ip %s, port %d at time %ld.%ld\n",inet_ntoa(client.sin_addr),htons(client.sin_port), tv.tv_sec,tv.tv_usec);
+        printf("You got a connection from client's ip %s, port %d at time %ld.%ld\n",inet_ntoa(client.sin_addr),htons(client.sin_port), tv.tv_sec,tv.tv_usec);
         
-        int iret=-1;
+        int iret = -1;
         while(1)
         {
             iret = recv(connectfd, buf, MAXRECVLEN, 0);
             if(iret>0)
             {
                 printf("%s\n", buf);
-            }else
+            }
+			else
             {
                 close(connectfd);
                 break;

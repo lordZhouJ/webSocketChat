@@ -42,8 +42,8 @@ int main(int argc, char *argv[])
 
     //Send some data
     //http 协议
-    //message ="GET /9X07-QAT/processorder.php HTTP/1.1\r\nHost: 220.180.239.212:8300\r\nUpgrade-Insecure-Requests: 1\r\n\r\n";
-     message ="GET /9X07-QAT/processorder.php HTTPS/1.1\r\nHost: 220.180.239.212:8300\r\n\r\n";
+    message ="GET /9X07-QAT/processorder.php HTTP/1.1\r\nHost: 220.180.239.212:8300\r\nUpgrade-Insecure-Requests: 1\r\n\r\n";
+     //message ="GET /9X07-QAT/processorder.php HTTPS/1.1\r\nHost: 220.180.239.212:8300\r\n\r\n";
     //向服务器发送数据
     if (send(socket_desc, message, strlen(message) , 0) < 0) {
         puts("Send failed");
